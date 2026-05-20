@@ -37,26 +37,27 @@ const allTags = [...new Set(categoryPrompts.flatMap(p => p.data.tags))];
   </p>
 
   <!-- Tag filter -->
-  <div class="flex flex-wrap gap-2 mt-6">
-    <a
-      href={`/${category}`}
-      class="px-3 py-1 rounded-full text-sm bg-primary text-white no-underline"
+  <div id="tag-filters" class="flex flex-wrap gap-2 mt-6">
+    <button
+      data-tag=""
+      class="tag-btn px-3 py-1 rounded-full text-sm border border-border
+             bg-primary text-white transition-colors"
     >
       全部
-    </a>
+    </button>
     {allTags.map(tag => (
-      <a
-        href={`/${category}?tag=${tag}`}
-        class="px-3 py-1 rounded-full text-sm bg-card border border-border
-               hover:border-primary hover:text-primary transition-colors no-underline"
+      <button
+        data-tag={tag}
+        class="tag-btn px-3 py-1 rounded-full text-sm bg-card border border-border
+               hover:border-primary hover:text-primary transition-colors"
       >
         {tag}
-      </a>
+      </button>
     ))}
   </div>
 
   <!-- Prompt list -->
-  <div class="mt-8 space-y-4">
+  <div id="prompt-list" class="mt-8 space-y-4">
     {categoryPrompts.length === 0 ? (
       <div class="text-center py-20 text-muted">
         <p class="text-lg">该分类暂无提示词</p>
@@ -64,8 +65,41 @@ const allTags = [...new Set(categoryPrompts.flatMap(p => p.data.tags))];
       </div>
     ) : (
       categoryPrompts.map(prompt => (
-        <PromptCard prompt={prompt} />
+        <div data-tags={JSON.stringify(prompt.data.tags)}>
+          <PromptCard prompt={prompt} />
+        </div>
       ))
     )}
   </div>
+
+  <script>
+    const tagBtns = document.querySelectorAll('#tag-filters .tag-btn');
+    const items = document.querySelectorAll('#prompt-list [data-tags]');
+
+    function filterByTag(tag: string) {
+      tagBtns.forEach(btn => {
+        const isActive = btn.getAttribute('data-tag') === tag;
+        btn.className = isActive
+          ? btn.className.replace(/bg-card border-border/, 'bg-primary text-white').replace(/hover:[^\s]+/g, '')
+          : btn.className.replace(/bg-primary text-white/, 'bg-card border-border hover:border-primary hover:text-primary');
+      });
+      items.forEach(el => {
+        const tags: string[] = JSON.parse(el.getAttribute('data-tags') || '[]');
+        (el as HTMLElement).style.display = !tag || tags.includes(tag) ? '' : 'none';
+      });
+    }
+
+    tagBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tag = btn.getAttribute('data-tag') || '';
+        history.replaceState(null, '', tag ? `?tag=${tag}` : window.location.pathname);
+        filterByTag(tag);
+      });
+    });
+
+    // Apply initial filter from URL
+    const params = new URLSearchParams(window.location.search);
+    const activeTag = params.get('tag') || '';
+    filterByTag(activeTag);
+  </script>
 </BaseLayout>
