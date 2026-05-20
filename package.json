@@ -7,11 +7,16 @@
     "build": "astro build",
     "preview": "astro preview"
   },
-  "keywords": ["ai", "prompts", "chinese"],
+  "keywords": [
+    "ai",
+    "prompts",
+    "chinese"
+  ],
   "author": "PromptHub",
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@tailwindcss/postcss": "^4.3.0",
     "@tailwindcss/vite": "^4.3.0",
     "astro": "^6.3.5",
     "tailwindcss": "^4.3.0"
