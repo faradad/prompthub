@@ -1,0 +1,33 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  prompt: CollectionEntry<'prompts'>;
+}
+
+const { prompt } = Astro.props;
+const { title, category, tags, difficulty } = prompt.data;
+const seoDescription = prompt.data.seoDescription || prompt.body.slice(0, 100).replace(/[#*>\[\]]/g, '');
+---
+
+<a
+  href={`/prompts/${prompt.id}`}
+  class="block p-5 bg-card rounded-xl border border-border hover:border-primary/30
+         hover:shadow-sm transition-all no-underline group"
+>
+  <div class="flex items-start justify-between gap-3">
+    <h3 class="font-semibold text-base text-text group-hover:text-primary transition-colors">
+      {title}
+    </h3>
+    <span class="shrink-0 text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary">
+      {difficulty}
+    </span>
+  </div>
+  <p class="text-sm text-muted mt-2 line-clamp-2">{seoDescription}</p>
+  <div class="flex items-center gap-2 mt-3">
+    <span class="text-xs px-2 py-0.5 rounded bg-bg text-muted">{category}</span>
+    {tags.slice(0, 3).map(tag => (
+      <span class="text-xs text-muted/70">#{tag}</span>
+    ))}
+  </div>
+</a>

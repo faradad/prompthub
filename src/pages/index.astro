@@ -1,7 +1,75 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SearchBar from '../components/SearchBar.astro';
+import PromptCard from '../components/PromptCard.astro';
+import { getCollection } from 'astro:content';
+
+const prompts = await getCollection('prompts');
+
+// Get unique categories from prompts
+const categories = [...new Set(prompts.map(p => p.data.category))];
+
+// Sort by date for "hot" section
+const recent = prompts
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 6);
 ---
 
-<BaseLayout title="首页" description="发现好用的AI提示词">
-  <h1 class="text-2xl font-bold">Hello PromptHub</h1>
+<BaseLayout title="首页" description="发现好用的AI提示词，提升工作效率">
+  <!-- Hero -->
+  <section class="text-center py-12">
+    <h1 class="text-4xl font-bold tracking-tight">发现好用的 AI 提示词</h1>
+    <p class="mt-3 text-muted text-lg">按场景分类，一键复制，即拿即用</p>
+    <div class="mt-8">
+      <SearchBar />
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="mt-8">
+    <h2 class="text-lg font-semibold mb-4">📂 按分类浏览</h2>
+    <div class="flex flex-wrap gap-3">
+      {categories.map(cat => (
+        <a
+          href={`/${cat}`}
+          class="px-4 py-2 bg-card border border-border rounded-full text-sm
+                 hover:border-primary hover:text-primary transition-colors no-underline"
+        >
+          {cat}
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Hot prompts -->
+  <section class="mt-12">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-lg font-semibold">🔥 最新提示词</h2>
+      <a href="/all" class="text-sm text-primary no-underline">查看全部 →</a>
+    </div>
+    <div class="grid gap-4 sm:grid-cols-2">
+      {recent.map(prompt => (
+        <PromptCard prompt={prompt} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Recommended tools -->
+  <section class="mt-12 p-6 bg-card rounded-xl border border-border">
+    <h2 class="text-lg font-semibold mb-4">🛠 推荐 AI 工具</h2>
+    <div class="grid gap-4 sm:grid-cols-3">
+      <a href="#" class="block p-4 rounded-lg bg-bg hover:bg-primary/5 transition-colors no-underline">
+        <div class="font-semibold text-sm">ChatGPT</div>
+        <p class="text-xs text-muted mt-1">通用对话，插件丰富</p>
+      </a>
+      <a href="#" class="block p-4 rounded-lg bg-bg hover:bg-primary/5 transition-colors no-underline">
+        <div class="font-semibold text-sm">Claude</div>
+        <p class="text-xs text-muted mt-1">长文本分析，代码能力强</p>
+      </a>
+      <a href="#" class="block p-4 rounded-lg bg-bg hover:bg-primary/5 transition-colors no-underline">
+        <div class="font-semibold text-sm">Midjourney</div>
+        <p class="text-xs text-muted mt-1">AI 绘画，商用级出图</p>
+      </a>
+    </div>
+  </section>
 </BaseLayout>
