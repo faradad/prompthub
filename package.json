@@ -19,5 +19,8 @@
     "@tailwindcss/postcss": "^4.3.0",
     "astro": "^6.3.5",
     "tailwindcss": "^4.3.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
   }
 }
