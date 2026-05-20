@@ -1,20 +1,16 @@
 {
   "name": "prompthub",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
+  "description": "中文AI提示词导航站",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["ai", "prompts", "chinese"],
+  "author": "PromptHub",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
     "astro": "^6.3.5",
