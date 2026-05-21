@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "npm run build && wrangler dev",
+    "generate-types": "wrangler types",
+    "deploy": "npm run build && wrangler deploy"
   },
   "keywords": [
     "ai",
@@ -16,11 +18,16 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@astrojs/cloudflare": "^13.5.3",
     "@tailwindcss/postcss": "^4.3.0",
     "astro": "^6.3.5",
     "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
-    "gh-pages": "^6.3.0"
+    "gh-pages": "^6.3.0",
+    "wrangler": "^4.93.0"
+  },
+  "overrides": {
+    "vite": "^7"
   }
 }
